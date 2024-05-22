@@ -1,5 +1,5 @@
 //Alunos contribuintes em ordem alfabética:
-// - José Oliveira Neto (Nome completo pendente)
+// - José Oliveira de Almeida Neto
 // - Kayke Nícolas Ferreira Gonçalves Campos
 // - Victor Vinícius de Araujo
 #include <iostream>
