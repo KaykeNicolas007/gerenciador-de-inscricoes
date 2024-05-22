@@ -177,3 +177,5 @@ int main(){
 
     //4. Cálculo de Frequência:
 }
+
+// esse comentario foi feito por neto.git
