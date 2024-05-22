@@ -11,6 +11,7 @@ struct Nopart{ //Nó da lista de participantes
     string email;
     string nome;
     int num_ins;
+    double frequencia;
     Nopart *prox;
     Nopart *ant;
 };
@@ -155,17 +156,34 @@ void imprimir_matriz(Despart *l, bool **mat, int lin, int col){
     }
 }
 
+void calcular_frequencia(Despart *l, bool **mat, int lin, int col){
+    Nopart *aux = l -> ini;
+    double cont = 0; //Atividades que cada participante foi
+    double result; //Resultado final
+    for(int i = 0; i < lin; i++){
+        for(int j = 0; j < col; j++){
+            if(mat[i][j])
+                cont++;
+        }
+        result = (cont/col)*100; //Quantas atividades ele foi, dividido pelo total de atividades e multiplicado por 100
+        aux -> frequencia = result; //Guarda no struct
+        aux = aux -> prox;
+        cont = 0;
+    }
+}
+
 int main(){
     //1. Cadastro de Participantes:
     Despart *part = criar_lista_part(); //Part = Participantes
-    inserir_fim_part(part, "Kayke", "Kayke@you");
-    inserir_fim_part(part, "Nicolas", "Nicolas@me");
+    inserir_fim_part(part, "Juninho", "Junho@you");
+    inserir_fim_part(part, "Capixaba", "Capixa@me");
     imprimir_lista_part(part);
 
     //2. Cadastro de Atividades:
     Desatv *atv = criar_lista_atv();
     inserir_fim_atv(atv, "Hackathon", "Competicao", "Terca, 20:00");
     inserir_fim_atv(atv, "Desenvolvimento", "Aula", "Quarta, 20:00");
+    inserir_fim_atv(atv, "Sexo Anal", "Suruba", "Amanha, 20:00");
     imprimir_lista_atv(atv);
 
     //3. Registro de Presenças:
@@ -176,4 +194,7 @@ int main(){
     imprimir_matriz(part, mat_presenca, quantia_part, quantia_atv);
 
     //4. Cálculo de Frequência:
+    calcular_frequencia(part, mat_presenca, quantia_part, quantia_atv);
+    cout << "Presenca total de " << part -> ini -> nome << ": " << part -> ini -> frequencia << "%\n";
+    cout << "Presenca total de " << part -> ini -> prox -> nome << ": " << part -> ini -> prox -> frequencia << "%\n";
 }
