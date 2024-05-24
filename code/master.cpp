@@ -155,6 +155,23 @@ void imprimir_matriz(DescritorParticipante *l, bool **mat, int lin, int col){
     }
 }
 
+void calcular_frequencia(Despart *l, bool **mat, int lin, int col){
+    Nopart *aux = l -> ini;
+    double cont = 0; //Atividades que cada participante foi
+    double result; //Resultado final
+    for(int i = 0; i < lin; i++){
+        for(int j = 0; j < col; j++){
+            if(mat[i][j])
+                cont++;
+        }
+        result = (cont/col)*100; //Quantas atividades ele foi, dividido pelo total de atividades e multiplicado por 100
+        aux -> frequencia = result; //Guarda no struct
+        aux = aux -> prox;
+        cont = 0;
+    }
+}
+
+
 int main(){
     //1. Cadastro de Participantes:
     DescritorParticipante *part = criar_lista_part(); //Part = Participantes
@@ -178,6 +195,9 @@ int main(){
     imprimir_matriz(part, mat_presenca, quantia_part, quantia_atv);
 
     //4. Cálculo de Frequência:
+    calcular_frequencia(part, mat_presenca, quantia_part, quantia_atv);
+    cout << "Presenca total de " << part -> ini -> nome << ": " << part -> ini -> frequencia << "%\n";
+    cout << "Presenca total de " << part -> ini -> prox -> nome << ": " << part -> ini -> prox -> frequencia << "%\n";
 }
 
 // esse comentario foi feito por neto.git
