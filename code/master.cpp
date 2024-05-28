@@ -194,6 +194,7 @@ int main(){
     imprimir_matriz(part, mat_presenca, quantia_part, quantia_atv);
 
     //4. Cálculo de Frequência:
+    calculo-frequencia
     calcular_frequencia(part, mat_presenca, quantia_part, quantia_atv);
     cout << "Presenca total de " << part -> ini -> nome << ": " << part -> ini -> frequencia << "%\n";
     cout << "Presenca total de " << part -> ini -> prox -> nome << ": " << part -> ini -> prox -> frequencia << "%\n";
