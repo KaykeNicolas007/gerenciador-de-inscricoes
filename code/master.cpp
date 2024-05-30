@@ -7,6 +7,7 @@
 #include <string>
 #include <random>
 #include <ctime>
+#include <iomanip>
 using namespace std;
 
 struct Nopart{ //Nó Participante
@@ -90,42 +91,74 @@ void inserir_fim_atv(Descatv *l, string nome, string tipo, string horario){
     l -> tam++;
 }
 
+//Imprime uma linha na tela
+void linha(int tam, string lin="-"){
+    for(int i = 0; i < tam; i++){
+        cout << lin;
+    }
+    cout << endl;
+}
+
+//Função para imprimir um cabeçalho na tela
+void cabecalho(string info, int tam){
+    int width = (tam/2) + 12;
+    linha(tam);
+    cout << setw(width) << info << endl;
+    linha(tam);
+}
+
+//Imprime um participante específico baseado no nome
+void imprimir_participante(Descpart *l, string nome){
+    Nopart *aux = l -> ini;
+    while(aux != NULL){
+        if(nome == aux -> nome){
+            cout << "Nome: " << aux -> nome << endl;
+            cout << "Email: " << aux -> email << endl;
+            cout << "Numero de Inscricao: " << aux -> num_ins << endl; 
+            cout << endl;  
+        }
+        aux = aux -> prox;
+    }
+}
+
+//Administra o cadastro da quantidade de participantes
 void cadastrar_part(Descpart *l) {
     string nome, email;
-    cout << "CADASTRANDO PARTICIPANTES\n";
+    cabecalho("CADASTRO DE PARTICIPANTES", 40);
     do{
         cout << "Digite FIM, para encerrar o programa!!\n";
         cout << "Nome: ";
         getline(cin, nome);
-        if(nome != "FIM") {
+        if(nome != "FIM" && nome != "fim") {
             cout << "Email: ";
             getline(cin, email);
-            if(email != "FIM") 
+            if(email != "FIM" && email != "fim") 
                 inserir_fim_part(l, nome, email);
             }
             cout << endl;
-    } while(nome != "FIM" && email != "FIM");
+    } while((nome != "FIM" && email != "FIM")&&(nome != "fim" && email != "fim"));
 }
 
+//Administra o cadastro da quantidade de atividades
 void cadastrar_atv(Descatv *l){
     string titulo, tipo, data_hora;
-    cout << "CADASTRANDO ATIVIDADES\n";
+    cabecalho("CADASTRO DE ATIVIDADES", 40);
     do{
         cout << "Digite FIM, para encerrar o programa!!\n";
         cout << "Titulo: ";
         getline(cin, titulo);
-        if(titulo != "FIM"){
+        if(titulo != "FIM" && titulo != "fim"){
             cout << "Tipo: ";
             getline(cin, tipo);
-            if(tipo != "FIM"){
+            if(tipo != "FIM" && tipo != "fim"){
                 cout << "Data e hora: ";
                 getline(cin, data_hora);
-                if(data_hora != "FIM")
+                if(data_hora != "FIM" && data_hora != "fim")
                     inserir_fim_atv(l, titulo, tipo, data_hora);
             }
         }
         cout << endl;
-    }while(titulo != "FIM" && tipo != "FIM" && data_hora != "FIM");
+    }while((titulo != "FIM" && tipo != "FIM" && data_hora != "FIM") && (titulo != "fim" && tipo != "fim" && data_hora != "fim"));
 }
 
 bool **criar_matriz(int lin, int col){
@@ -139,6 +172,7 @@ bool **criar_matriz(int lin, int col){
     return NULL;
 }
 
+//Verifica a presença do participante na atividade cadastrada preenchendo uma matriz do tipo bool
 void registrar_presenca(Descpart *lista_part, Descatv *lista_atv, bool **mat){
     char verificador;
     Nopart *aux_part = lista_part -> ini;
@@ -159,6 +193,7 @@ void registrar_presenca(Descpart *lista_part, Descatv *lista_atv, bool **mat){
     }
 }
 
+//Calcula a frequência com base na matriz do tipo bool fornecida
 void calcular_frequencia(Descpart *l, bool **mat, int lin, int col){
     Nopart *aux = l -> ini;
     double cont = 0; //Quantidade de casos favoráveis
@@ -168,13 +203,14 @@ void calcular_frequencia(Descpart *l, bool **mat, int lin, int col){
             if(mat[i][j])
                 cont++;
         }
-        result = (cont/col)*100; //Quantas atividades ele foi, dividido pelo total de atividades e multiplicado por 100
+        result = (cont/col)*100; //Quantas atividades ele participou, dividido pelo total de atividades disponíveis e multiplicado por 100
         aux -> frequencia = result;
         aux = aux -> prox;
         cont = 0;
     }
 }
 
+//Analisa a lista de participantes e cria uma lista de elegíveis com base na frequência
 Descpart *escolher_elegiveis(Descpart *l){
     Descpart *elegiveis = criar_lista_part();
     Nopart *aux = l -> ini;
@@ -186,29 +222,20 @@ Descpart *escolher_elegiveis(Descpart *l){
     return elegiveis;
 }
 
-void sorteio(Descpart *elegiveis){
+//Sorteia, entre os participantes elegíveis, os brindes de forma aleatória, utilizando a biblioteca random e ctime
+void sorteio(Descpart *elegiveis, Descpart *l){
     int sorteado;
-    int cont = 3;
-    int total_premios = 1;
     Nopart *aux = elegiveis -> ini;
     srand(time(NULL));
     if(elegiveis -> tam > 0){
-        if(elegiveis -> tam == 1)
-            cout << "O vencedor de todos os premios foi: " << elegiveis -> ini -> nome;
-        else{
-            for(int i = 0; i < cont; i++){
-                sorteado = rand() % 3;
-                if(sorteado+1 <= elegiveis -> tam){
-                    cout << "Numero sorteado: " << sorteado << endl;
-                    for(int i = 0; i < sorteado; i++){
-                        aux = aux -> prox;
-                    }
-                    cout << "O vencedor do premio n " << total_premios << " foi: " << aux -> nome << endl;
-                    total_premios++;
-                    aux = elegiveis -> ini;
-                }else
-                    cont++;
-            }
+        for(int i = 0; i < 3; i++){
+        sorteado = (rand() % elegiveis->tam);
+        for(int j = 0; j < sorteado; j++){
+            aux = aux -> prox;
+        }
+        cout << "O vencedor do premio de numero " << i+1 << " foi: " << aux -> nome << endl;
+        imprimir_participante(l, aux -> nome);
+        aux = elegiveis -> ini;
         }
     }
 }
@@ -221,7 +248,7 @@ int main(){
     bool **matriz_presenca;
     int total_part, total_atv;
 
-    //1. Cadastro de Participantes:
+    //1. Cadastro de Participantes:+
     cadastrar_part(lista_part);
 
     //2. Cadastro de Atividades:
@@ -240,5 +267,5 @@ int main(){
     elegiveis = escolher_elegiveis(lista_part);
 
     //6. Realização do Sorteio:
-    sorteio(elegiveis);
+    sorteio(elegiveis,lista_part);
 }
