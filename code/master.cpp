@@ -5,7 +5,8 @@
  */
 #include <iostream>
 #include <string>
-#include <iomanip>
+#include <random>
+#include <ctime>
 using namespace std;
 
 struct Nopart{ //Nó Participante
