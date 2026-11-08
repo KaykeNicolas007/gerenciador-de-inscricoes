@@ -1,49 +1,104 @@
 # Gerenciador de Inscrições
 
-Esse sistema foi desenvolvido durante a cadeira Linguagem de Programação I (LPI), ministrada pelo professor Ricardo Ribeiro, no campus VII da Universidade Estadual da Paraíba (UEPB), no curso de Ciência da Computação. Essa aplicação é um gerenciador de inscrições em eventos. Com isso, o intuito foi aplicar todo o conhecimento até então desenvolvido na disciplina em um projeto que chegasse o mais próximo possível da solução real de uma aplicação semelhante.
+Sistema de linha de comando, em C++, para gerenciar a participação em um evento: cadastra participantes e atividades, registra quem esteve presente em cada atividade, calcula a frequência de cada pessoa e sorteia brindes entre quem atingiu a frequência mínima.
 
-Com isso, a aplicação gerencia pessoas que se inscrevem em um determinado evento. Após as inscrições, o sistema checa a presença dos usuários e então realiza um sorteio de brindes.
+Foi desenvolvido na disciplina **Linguagem de Programação I (LPI)**, ministrada pelo professor Ricardo Ribeiro, no Campus VII da Universidade Estadual da Paraíba (UEPB), no curso de Ciência da Computação. A ideia foi aplicar o que a disciplina ensinou (listas encadeadas, ponteiros, alocação dinâmica, matrizes e modularização) na modelagem de um problema próximo de um caso real.
 
-# Conhecimentos Desenvolvidos
+## Autores
 
-Alguns conhecimentos importantes desenvolvidos para alunos do segundo período de Ciência da Computação são listados abaixo:
+- José Oliveira de Almeida Neto
+- Kayke Nícolas Ferreira Gonçalves Campos
+- Victor Vinícius de Araujo
 
-## Colaboração
+## Como funciona
 
-Sendo a primeira disciplina a trazer projetos não individuais, a equipe teve de aprender a dividir tarefas, realizar uma boa comunicação e garantir que todos os participantes tivessem a mesma noção da aplicação para que fosse possível seu desenvolvimento de forma confortável.
+O programa roda em uma única execução, em seis etapas sequenciais:
 
-## Git e GitHub
+1. **Cadastro de participantes:** nome e e-mail. Cada participante recebe um número de inscrição, que corresponde à sua posição na lista (começando em 0).
+2. **Cadastro de atividades:** título, tipo (painel, palestra, competição etc.) e data/hora, digitados como texto livre.
+3. **Registro de presenças:** para cada par participante × atividade, o programa pergunta se a pessoa compareceu (`S`/`N`).
+4. **Cálculo de frequência:** porcentagem de atividades a que cada participante compareceu.
+5. **Seleção de elegíveis:** quem tem frequência **igual ou superior a 75%** entra na lista de elegíveis.
+6. **Sorteio:** são sorteados 3 brindes entre os elegíveis, e os dados de cada vencedor (nome, e-mail e número de inscrição) são exibidos.
 
-Em aspectos mais técnicos de colaboração, foi de suma importância aprender ao menos o básico de Git e GitHub, ferramentas usuais do mercado de trabalho para colaboração no desenvolvimento de software.
+Nos cadastros, digite `FIM` (ou `fim`) para encerrar a etapa.
 
-## Estruturas de dados dinâmicas
+## Como compilar e executar
 
-Uso de listas duplamente encadeadas para armazenar participantes e atividades, com ponteiros para o próximo e o anterior elemento.
+É necessário ter um compilador C++ (por exemplo, o `g++`).
 
-## Ponteiros e alocação dinâmica de memória
+```bash
+g++ master.cpp -o gerenciador
+./gerenciador
+```
 
-Uso de new, ponteiros e estruturas descritoras para criar listas em tempo de execução.
+## Exemplo de uso
 
-## Organização e modularização do código
+```
+----------------------------------------
+        CADASTRO DE PARTICIPANTES
+----------------------------------------
+Digite FIM, para encerrar o programa!!
+Nome: Maria Silva
+Email: maria@email.com
 
-O sistema foi dividido em funções específicas para cadastrar dados, registrar presenças, calcular frequência, selecionar elegíveis e realizar o sorteio.
+Digite FIM, para encerrar o programa!!
+Nome: FIM
 
-## Manipulação de matrizes
+(... cadastro de atividades ...)
 
-A matriz booleana representa a relação entre participantes e atividades, indicando quem esteve presente em cada atividade.
+Maria Silva foi para a atividade Palestra de Abertura? [S/N]: S
+(...)
 
-## Algoritmos e lógica de programação
+O vencedor do premio de numero 1 foi: Maria Silva
+Nome: Maria Silva
+Email: maria@email.com
+Numero de Inscricao: 0
+```
 
-Foram aplicados percursos em listas, estruturas de repetição, condicionais, cálculo de porcentagem e filtragem por critério — frequência mínima de 75%.
+## Estrutura do código
 
-## Entrada e saída de dados
+| Elemento                                      | Função                                                                     |
+| --------------------------------------------- | -------------------------------------------------------------------------- |
+| `Nopart` / `Noatv`                            | Nós das listas duplamente encadeadas de participantes e atividades         |
+| `Descpart` / `Descatv`                        | Descritores das listas (tamanho, início e fim)                             |
+| `criar_lista_part`, `criar_lista_atv`         | Criação das listas vazias                                                  |
+| `inserir_fim_part`, `inserir_fim_atv`         | Inserção no final das listas                                               |
+| `cadastrar_part`, `cadastrar_atv`             | Interação com o usuário para os cadastros                                  |
+| `criar_matriz`, `registrar_presenca`          | Matriz booleana (participantes × atividades) e preenchimento das presenças |
+| `calcular_frequencia`                         | Calcula a porcentagem de presença de cada participante                     |
+| `escolher_elegiveis`                          | Filtra os participantes com frequência mínima de 75%                       |
+| `sorteio`                                     | Sorteia os brindes entre os elegíveis                                      |
+| `linha`, `cabecalho`, `imprimir_participante` | Funções auxiliares de saída                                                |
 
-Uso de cin, cout e getline para construir uma interação textual com o usuário, incluindo menus conceituais, mensagens e formatação de saída.
+## Conhecimentos desenvolvidos
 
-## Geração de números aleatórios
+- **Colaboração em equipe:** primeira disciplina com projeto não individual, exigindo divisão de tarefas, comunicação e alinhamento sobre o funcionamento da aplicação.
+- **Git e GitHub:** uso básico das ferramentas de versionamento e colaboração, comuns no mercado.
+- **Estruturas de dados dinâmicas:** listas duplamente encadeadas, com descritores, para participantes e atividades.
+- **Ponteiros e alocação dinâmica:** uso de `new` e ponteiros para criar listas e a matriz de presenças em tempo de execução.
+- **Matrizes:** matriz booleana que relaciona participantes e atividades.
+- **Modularização:** divisão do sistema em funções com responsabilidades específicas.
+- **Algoritmos e lógica:** percursos em listas, repetições, condicionais, cálculo de porcentagem e filtragem por critério.
+- **Entrada e saída:** `cin`, `cout`, `getline` e formatação com `iomanip`.
+- **Números aleatórios:** `rand`, `srand` e `time` (`ctime`) para o sorteio.
+- **Modelagem de um problema real:** transformação de um processo de eventos (inscrições, atividades, presenças e brindes) em entidades, operações e regras de negócio.
 
-Utilização das bibliotecas random e ctime para sortear participantes elegíveis.
+## Limitações conhecidas
 
-## Modelagem de um problema real
+Por ser um projeto acadêmico de segundo período, há pontos que ficaram de fora:
 
-O projeto transforma um processo de eventos — inscrições, atividades, presenças e brindes — em entidades e operações computacionais. Isso também envolve decomposição do problema e definição de regras de negócio.
+- O sorteio não remove o vencedor da lista, então a mesma pessoa pode ganhar mais de um brinde. Também sorteia sempre 3 prêmios, mesmo com menos de 3 elegíveis.
+- No registro de presença, qualquer resposta diferente de `N` maiúsculo (inclusive `n`) é tratada como presença.
+- Os dados não são salvos: tudo é perdido ao fim da execução.
+- A memória alocada com `new` não é liberada.
+- Data e hora das atividades são texto livre, sem validação, e não há validação de e-mail.
+- O vencedor é localizado por nome, então participantes com nomes iguais teriam os dados exibidos juntos.
+
+## Ideias de evolução
+
+- Menu interativo para executar as etapas em qualquer ordem.
+- Persistência dos dados em arquivo.
+- Sorteio sem repetição de vencedores.
+- Exibição de um relatório final com a frequência de cada participante.
+- Liberação adequada da memória ao final do programa.
